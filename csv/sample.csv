@@ -1,0 +1,11 @@
+questiontext,A,B,C,D,Answer 1,Answer 2
+The dmesg command,Shows user login logoff attempts,Shows the syslog file for info messages,kernel log messages,Shows the daemon log messages,C,
+The command “mknod myfifo b 4 16”,Will create a block device if user is root,Will create a block device for all users,Will create a FIFO if user is not root,"None ,of the mentioned",A,B
+Which command is used to set terminal IO characteristic?,tty,ctty,ptty,stty,D,
+Which command is used to record a user login session in a file,macro,read,script,none of the mentioned,C,
+Which command is used to display the operating system name,os,unix,kernel,uname,D,
+Which command is used to display the unix version,uname -r,uname -n,uname -t,kernel,A,
+Which option of ls command used to view file inode number,–l,–o,–a,–i,D,
+Find / -name ‘*’ will,List all files and directories recursively starting from /,List a file named * in /,List all files in / directory,List all files and directories in / directory,A,
+Using which command you find resource limits to the session?,rlimit,ulimit,setrlimit,getrlimit,B,
+Which command is used to print a file,print,ptr,lpr,none of the mentioned,C,
