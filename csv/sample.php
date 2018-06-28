@@ -39,7 +39,7 @@ if ($format) {
         'Answer 1' => 'Answer 1',
         'Answer 2' => 'Answer 2'
     );
-  $row_value1 = array(
+    $rowvalue1 = array(
         'questiontext' => 'The command “mknod myfifo b 4 16”',
         'A' => 'Will create a block device if user is root',
         'B' => 'Will create a block device for all users',
@@ -48,7 +48,7 @@ if ($format) {
         'Answer 1' => 'A',
         'Answer 2' => 'B'
     );
-    $row_value2 = array(
+    $rowvalue2 = array(
         'questiontext' => 'Which command is used to display the operating system name?',
         'A' => 'os',
         'B' => 'unix',
@@ -58,7 +58,7 @@ if ($format) {
         'Answer 2' => ''
     );
     switch ($format) {
-        case 'csv' : user_download_csv($header,$row_value1,$row_value2);
+        case 'csv' : user_download_csv($header, $rowvalue1, $rowvalue2);
     }
     die;
 }
@@ -70,8 +70,8 @@ function user_download_csv($header,$row_value1,$row_value2) {
     $csvexport = new csv_export_writer();
     $csvexport->set_filename($filename);
     $csvexport->add_data($header);
-    $csvexport->add_data($row_value1);
-    $csvexport->add_data($row_value2);
+    $csvexport->add_data($rowvalue1);
+    $csvexport->add_data($rowvalue2);
     $csvexport->download_file();
     die;
 }

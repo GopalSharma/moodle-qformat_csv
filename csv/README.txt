@@ -15,7 +15,7 @@ The CSV file used for import should have the following structure :
 - You can also download the sample file for your reference.
 
 
-You can also download the sample file for your reference or a smple file is provided with this plugin.
+You can also download the sample file for your reference or a sample file is provided with this plugin.
 
 More option will be added in the future 
 
