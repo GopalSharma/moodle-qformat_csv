@@ -25,12 +25,11 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-
 /**
  * CSV format - a simple format for creating multiple and single choice questions.
  * The format looks like this:
  * questiontext, A,   B,   C,   D,   Answer 1,    Answer 2
- * 3, 4, 7, 8, 11, 12, ... What number should come next?,7,10,14,15,D
+ * "3, 4, 7, 8, 11, 12, ... What number should come next?",7,10,14,15,D
  * That is,
  *  + first line contains the headers separated with commas
  *  + Next line contains the details of question each line contain one question text, four option, and either one or two answers again all separated by commas.
