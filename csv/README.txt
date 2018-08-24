@@ -3,8 +3,9 @@ Question formats import plugin
 
 ==============================
 
-This plugin contains support for importing  questions in CSV format.
+This plugin contains support for importing of only multichoice questions in CSV format file in question bank.
 
+The CSV format is a very simple way of creating multiple choice questions using a CSV(Comma separated value) file. The first line of CSV file must contain the headers separated with commas. Following all the other (except Header) rows/lines contain details about the one question ie question text, four option, and answer. Each line will contain the details about the one question.
 
 The CSV file used for import should have the following structure :
 - A CSV file with all questions in comma separated value form with a .csv extension
@@ -14,9 +15,18 @@ The CSV file used for import should have the following structure :
 - Each line contains all the details regarding the one question ie. question text, options, and answer.
 - You can also download the sample file for your reference.
 
+IMPORTANT NOTES:
 
-You can also download the sample file for your reference or a sample file is provided with this plugin.
+You have to save the file in a csv format. Don't save it as an Excel document or anything like that.
+Non-ASCII characters like 'quotes' can cause import errors. To avoid this always save your text file in UTF-8 format (most text editors, even libre office, will ask you).
+The Header must be as it is shown in the example everything is case sensitive as shown below otherwise, the import will fail.
+"Answer 2" is optional, as of now there can be maximum of two right answers of a question.
+If you want have comm(,) between the text may be in question text or in options text then you must include that text between the double quotes(") like below in the 3rd question where entire question is included between the double quotes like this "3, 4, 7, 8, 11, 12, ... What number should come next?"
 
-More option will be added in the future 
+    questiontext, A, B, C, D, Answer 1, Answer 2 
+    Which command is used to print a file, print, ptr, lpr, none of the mentioned, C
+    The command “mknod myfifo b 4 16”, block device root, block device for all users, FIFO if user is not root, None of the mentioned, A, B
+    "3, 4, 7, 8, 11, 12, ... What number should come next?",7,10,14,15,D
 
+You can also see the 'Answer 2' is optional as 1st and the 3rd question has only one answer whereas 2nd question has two answers.
 Questions imported in question bank can also be imported when creating a quiz from the question bank.
