@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * csv format question importer.
+ * CSV format question importer.
  *
  * @package    qformat_csv
  * @copyright  2018 Gopal Sharma <gopalsharma66@gmail.com>
@@ -25,16 +25,20 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-/**
- * CSV format - a simple format for creating multiple and single choice questions.
+/*
+ CSV format - a simple format for creating multiple and single choice questions.
  * The format looks like this:
  * questiontext, A,   B,   C,   D,   Answer 1,    Answer 2
  * "3, 4, 7, 8, 11, 12, ... What number should come next?",7,10,14,15,D
  * That is,
  *  + first line contains the headers separated with commas
- *  + Next line contains the details of question each line contain one question text, four option, and either one or two answers again all separated by commas.
+ *  + Next line contains the details of question, each line contain
+ *  one question text, four option, and either one or two answers again all separated by commas.
  *  Each line contains all the details regarding the one question ie. question text, options and answer.
  *  You can also download the sample file for your reference.
+ *
+ * @copyright 2018 Gopal Sharma <gopalsharma66@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 $header = true;
 class qformat_csv extends qformat_default {
@@ -55,28 +59,29 @@ class qformat_csv extends qformat_default {
     }
 
     public function readquestions($lines) {
+        global $CFG;
+        require_once($CFG->libdir . '/csvlib.class.php');
         question_bank::get_qtype('multianswer'); // Ensure the multianswer code is loaded.
         $questions = array();
         $question = $this->defaultquestion();
         $headers = explode(',', $lines[0]);
-         // Get All the Header Values
+        // Get All the Header Values from the CSV file.
         for ($rownum = 1; $rownum < count($lines); $rownum++) {
-            // $rowdata = explode(',', $lines[$rownum]);
-            $rowdata = str_getcsv($lines[$rownum], ",", '"'); // ignore the commas(,) within the double quotes (")
-            /* echo '<pre>',print_r($headers),'</pre>'; */
+            $rowdata = str_getcsv($lines[$rownum], ",", '"'); // Ignore the commas(,) within the double quotes (").
             $columncount = count($rowdata);
             $headerscount = count($headers);
             if ($columncount != $headerscount) {
-                if ($columncount > $headerscount) { // There are more than 7 values or there will be extra comma making them more then 7 values.
+                if ($columncount > $headerscount) {
+                    // There are more than 7 values or there will be extra comma making them more then 7 .values.
                     echo get_string('commma_error', 'qformat_csv', $rownum);
                     return 0;
-                } else if ($columncount < $headerscount) { // Entire question with options and answer is not in one line, new line found.
+                } else if ($columncount < $headerscount) {
+                    // Entire question with options and answer is not in one line, new line found.
                     echo get_string('newline_error', 'qformat_csv', $rownum);
                     return 0;
                 }
             }
             for ($linedata = 0; $linedata < count($rowdata); $linedata++) {
-                // echo $headers[$linedata]." ".$linedata;
                 if (empty(trim($rowdata[6]))) {
                     $fraction = 1;
                     $question->single = 1;
@@ -84,24 +89,21 @@ class qformat_csv extends qformat_default {
                     $fraction = 0.5;
                     $question->single = 0;
                 }
-                // if($headers[$linedata] == 'name'){
                 $question->qtype = 'multichoice';
                 $question->name = $this->create_default_question_name($rownum, get_string('questionname', 'question'));
-                // } else
                 if ($headers[$linedata] == 'questiontext') {
                       $question->questiontext = htmlspecialchars(trim($rowdata[$linedata]), ENT_NOQUOTES);
-                } else if ($headers[$linedata] == 'generalfeedback') { // if extra column is provide with header 'generalfeedback' then that feedback will get applied
+                } else if ($headers[$linedata] == 'generalfeedback') {
+                    // If extra column is provide with header 'generalfeedback' then that feedback will get applied.
                     $question->generalfeedback = $rowdata[$linedata];
-                    // $question->generalfeedbackformat = FORMAT_HTML;
+                    $question->generalfeedbackformat = FORMAT_HTML;
                 } else if ($headers[$linedata] == 'defaultgrade') {
                     $question->defaultgrade = $this->text_field($rowdata[$linedata]);
                 } else if ($headers[$linedata] == 'penalty') {
                     $question->penalty = $rowdata[$linedata];
                 } else if ($headers[$linedata] == 'hidden') {
                     $question->hidden = $rowdata[$linedata];
-                } /*elseif ($headers[$linedata] == 'singlechoice') {
-                    $question->single = $rowdata[$linedata];
-                }*/ else if ($headers[$linedata] == 'answernumbering') {
+                } else if ($headers[$linedata] == 'answernumbering') {
                     $question->answernumbering = $rowdata[$linedata];
                 } else if ($headers[$linedata] == 'correctfeedback') {
                     $question->correctfeedback = $this->text_field($rowdata[$linedata]);
@@ -157,7 +159,6 @@ class qformat_csv extends qformat_default {
         }
          return $questions;
     }
-    
     protected function text_field($text) {
         return array(
             'text' => htmlspecialchars(trim($text), ENT_NOQUOTES),
@@ -170,5 +171,4 @@ class qformat_csv extends qformat_default {
         // This is no longer needed but might still be called by default.php.
         return;
     }
-    
 }
