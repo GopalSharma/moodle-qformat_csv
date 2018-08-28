@@ -15,17 +15,15 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * csv format question importer.
+ * This page provides user to Download a sample csv file to import question questions in the question bank
  *
  * @package    qformat_csv
  * @copyright  2018 Gopal Sharma <gopalsharma66@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-/**
- * script for downloading admissions
- */
-require_once(dirname(__FILE__) . '/../../../config.php');
+require_once(dirname(__FILE__) . '/../../../config.php'); // Specify path to moodle /config.php file.
+require_login(); // require valid moodle login.  Will redirect to login page if not logged in.
 require_once($CFG->libdir . '/adminlib.php');
 $format = optional_param('format', 'csv', PARAM_ALPHA);
 
@@ -58,12 +56,12 @@ if ($format) {
         'Answer 2' => ''
     );
     switch ($format) {
-        case 'csv' : user_download_csv($header, $rowvalue1, $rowvalue2);
+        case 'csv' : qformat_csv_download($header, $rowvalue1, $rowvalue2);
     }
     die;
 }
 
-function user_download_csv($header,$row_value1,$row_value2) {
+function qformat_csv_download($header, $rowvalue1, $rowvalue2) {
     global $CFG;
     require_once($CFG->libdir . '/csvlib.class.php');
     $filename = clean_filename(get_string('samplefile', 'qformat_csv'));
