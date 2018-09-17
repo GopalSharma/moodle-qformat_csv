@@ -40,14 +40,15 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright 2018 Gopal Sharma <gopalsharma66@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-$header = true;
+
+$globals['header'] = true;
 class qformat_csv extends qformat_default {
     public function provide_import() {
         return true;
     }
 
     public function provide_export() {
-        return false;
+        return true;
     }
 
     /**
@@ -170,5 +171,78 @@ class qformat_csv extends qformat_default {
     public function readquestion($lines) {
         // This is no longer needed but might still be called by default.php.
         return;
+    }
+
+    public function writequestion($question) {
+        global $OUTPUT;
+        // Output depends on question type.
+        if ($globals['header']) {
+            if ($question->qtype == 'category') {// If Write "category to file" i selected then no need to add "\n" in header.
+                $expout = "questiontext,A,B,C,D,Answer 1,Answer 2";
+            } else {
+                $expout .= "questiontext,A,B,C,D,Answer 1,Answer 2\n";
+            }
+            $globals['header'] = false;
+        }
+          $answercount = 0;
+          $rightanswercount = 0;
+        switch($question->qtype) {
+            case 'multichoice':
+                if (count($question->options->answers) != 4 ) {
+                    break;
+                }
+                $expout .= '"'.$question->questiontext.'"'.',';
+                foreach ($question->options->answers as $answer) {
+                    $answercount++;
+                    if ($answer->fraction == 1 && $question->options->single) {
+                        switch ($answercount) {
+                            case 1:
+                                $rightanswer = 'A'.',';
+                                break;
+                            case 2:
+                                $rightanswer = 'B'.',';
+                                break;
+                            case 3:
+                                $rightanswer = 'C'.',';
+                                break;
+                            case 4:
+                                $rightanswer = 'D'.',';
+                                break;
+                            default:
+                                $rightanswer = '';
+                                break;
+                        }
+                    } else if ($answer->fraction == 0.5 && !$question->options->single) {
+                        $rightanswercount ++;
+                        $comma = "";
+                        if ( $rightanswercount <= 1 ) {
+                            $comma = ","; // Add comma  to first answer i.e. to 'Answer 1'.
+                        }
+                        switch ($answercount) {
+                            case 1:
+                                $rightanswer .= 'A'.$comma;
+                                break;
+                            case 2:
+                                $rightanswer .= 'B'.$comma;
+                                break;
+                            case 3:
+                                $rightanswer .= 'C'.$comma;
+                                break;
+                            case 4:
+                                $rightanswer .= 'D'.$comma;
+                                break;
+                            default:
+                                $rightanswer = '';
+                                break;
+                        }
+
+                    }
+                    $expout .= '"'.$answer->answer.'"'.',';
+                }
+                $expout .= $rightanswer;
+            break;
+        }
+
+        return $expout;
     }
 }
