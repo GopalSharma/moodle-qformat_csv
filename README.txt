@@ -1,3 +1,10 @@
+New in 3.5.04 (Build: 2018091801)
+==============
+
+- FIX: Solved the issue related to CSV file handling.
+- NEW: Implemented functionality to export of multichoice question into a CSV file having four options and maximum of two right answers.
+
+
 # Description
 Question formats import plugin 
 
