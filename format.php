@@ -71,25 +71,30 @@ class qformat_csv extends qformat_default {
             $rowdata = str_getcsv($lines[$rownum], ",", '"'); // Ignore the commas(,) within the double quotes (").
             $columncount = count($rowdata);
             $headerscount = count($headers);
-            if ($columncount != $headerscount) {
-                if ($columncount > $headerscount) {
-                    // There are more than 7 values or there will be extra comma making them more then 7 .values.
-                    echo get_string('commma_error', 'qformat_csv', $rownum);
+            if ($columncount != $headerscount || $columncount != 7  || $headerscount != 7) {
+                if ($columncount > $headerscount ) {
+                    // There are more than 7 values or there will be extra comma making them more then 7 values.
+                        echo get_string('commma_error', 'qformat_csv', $rownum);
                     return 0;
                 } else if ($columncount < $headerscount) {
                     // Entire question with options and answer is not in one line, new line found.
-                    echo get_string('newline_error', 'qformat_csv', $rownum);
+                        echo get_string('newline_error', 'qformat_csv', $rownum);
+                    return 0;
+                } else {
+                    // There are more than 7 values or there will be extra comma making them more then 7 values.
+                        echo get_string('csv_file_error', 'qformat_csv', $rownum);
                     return 0;
                 }
             }
             for ($linedata = 0; $linedata < count($rowdata); $linedata++) {
-                if (empty(trim($rowdata[6]))) {
+                if (empty(trim($rowdata[array_search("Answer 2", $headers)]))) {
                     $fraction = 1;
                     $question->single = 1;
                 } else {
                     $fraction = 0.5;
                     $question->single = 0;
                 }
+
                 $question->qtype = 'multichoice';
                 $question->name = $this->create_default_question_name($rownum, get_string('questionname', 'question'));
                 if ($headers[$linedata] == 'questiontext') {
