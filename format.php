@@ -66,6 +66,12 @@ class qformat_csv extends qformat_default {
         $questions = array();
         $question = $this->defaultquestion();
         $headers = explode(',', $lines[0]);
+        $answertwo = 0;
+        foreach ($headers as $key => $value) {
+            if (trim($value) == "Answer 2") {
+                $answertwo = $key;
+            }
+        }
         // Get All the Header Values from the CSV file.
         for ($rownum = 1; $rownum < count($lines); $rownum++) {
             $rowdata = str_getcsv($lines[$rownum], ",", '"'); // Ignore the commas(,) within the double quotes (").
@@ -87,12 +93,12 @@ class qformat_csv extends qformat_default {
                 }
             }
             for ($linedata = 0; $linedata < count($rowdata); $linedata++) {
-                if (empty(trim($rowdata[array_search("Answer 2", $headers)]))) {
-                    $fraction = 1;
-                    $question->single = 1;
-                } else {
+                if ($answertwo != 0 && !empty(trim($rowdata[$answertwo]))) {
                     $fraction = 0.5;
                     $question->single = 0;
+                } else {
+                    $fraction = 1;
+                    $question->single = 1;
                 }
 
                 $question->qtype = 'multichoice';
