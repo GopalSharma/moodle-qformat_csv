@@ -1,0 +1,11 @@
+questionname,questiontext,A,B,C,D,Answer 1,Answer 2,answernumbering,correctfeedback,partiallycorrectfeedback,incorrectfeedback,defaultmark
+Question1,The dmesg command,Shows user login logoff attempts,Shows the syslog file for info messages,kernel log messages,Shows the daemon log messages,C,,123,Your answer is correct.,Your answer is partially correct.,Your answer is incorrect.,5
+Question2,The command “mknod myfifo b 4 16”,Will create a block device if user is root,Will create a block device for all users,Will create a FIFO if user is not root,"None ,of the mentioned",A,B,ABCD,Your answer is correct.,Your answer is partially correct.,Your answer is incorrect.,10
+Question3,Which command is used to set terminal IO characteristic?,tty,ctty,ptty,stty,D,,iii,Your answer is correct.,Your answer is partially correct.,Your answer is incorrect.,5
+Question4,Which command is used to record a user login session in a file,macro,read,script,none of the mentioned,C,,IIII,Your answer is correct.,Your answer is partially correct.,Your answer is incorrect.,5
+Question5,Which command is used to display the operating system name,os,unix,kernel,uname,D,,none,Your answer is correct.,Your answer is partially correct.,Your answer is incorrect.,10
+Question6,Which command is used to display the unix version,uname -r,uname -n,uname -t,kernel,A,,abcd,Your answer is correct.,Your answer is partially correct.,Your answer is incorrect.,5
+Question7,Which option of ls command used to view file inode number,–l,–o,–a,–i,D,,,Your answer is correct.,Your answer is partially correct.,Your answer is incorrect.,10
+Question8,Find / -name ‘*’ will,List all files and directories recursively starting from /,List a file named * in /,List all files in / directory,List all files and directories in / directory,A,,,Your answer is correct.,Your answer is partially correct.,Your answer is incorrect.,5
+Question9,Using which command you find resource limits to the session?,rlimit,ulimit,setrlimit,getrlimit,B,,123,Your answer is correct.,Your answer is partially correct.,Your answer is incorrect.,5
+Question10,Which command is used to print a file,print,ptr,lpr,none of the mentioned,C,,123,Your answer is correct.,Your answer is partially correct.,Your answer is incorrect.,10
