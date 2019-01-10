@@ -27,10 +27,19 @@ defined('MOODLE_INTERNAL') || die();
 
 /*
  CSV format - a simple format for creating multiple and single choice questions.
- * The format looks like this:
- * questiontext, A,   B,   C,   D,   Answer 1,    Answer 2
- * "3, 4, 7, 8, 11, 12, ... What number should come next?",7,10,14,15,D
- * That is,
+ * The format looks like this for simple csv file with minimum columns:
+ * questionname, questiontext, A,   B,   C,   D,   Answer 1,    Answer 2
+ * Question1, "3, 4, 7, 8, 11, 12, ... What number should come next?",7,10,14,15,D
+ *
+ *
+ * The format looks like this for Extended csv file with extra columns columns:
+ * questionname, questiontext, A,   B,   C,   D,   Answer 1,    Answer 2,
+   answernumbering, correctfeedback, partiallycorrectfeedback, incorrectfeedback, defaultmark
+ * Question1, "3, 4, 7, 8, 11, 12, ... What number should come next?",7,10,14,15,D, ,
+   123, Your answer is correct., Your answer is partially correct., Your answer is incorrect., 1
+ *
+ *
+ *  That is,
  *  + first line contains the headers separated with commas
  *  + Next line contains the details of question, each line contain
  *  one question text, four option, and either one or two answers again all separated by commas.
@@ -77,19 +86,21 @@ class qformat_csv extends qformat_default {
             $rowdata = str_getcsv($lines[$rownum], ",", '"'); // Ignore the commas(,) within the double quotes (").
             $columncount = count($rowdata);
             $headerscount = count($headers);
-            if ($columncount != $headerscount || $columncount != 7  || $headerscount != 7) {
-                if ($columncount > $headerscount ) {
-                    // There are more than 7 values or there will be extra comma making them more then 7 values.
-                        echo get_string('commma_error', 'qformat_csv', $rownum);
-                    return 0;
-                } else if ($columncount < $headerscount) {
-                    // Entire question with options and answer is not in one line, new line found.
-                        echo get_string('newline_error', 'qformat_csv', $rownum);
-                    return 0;
-                } else {
-                    // There are more than 7 values or there will be extra comma making them more then 7 values.
-                        echo get_string('csv_file_error', 'qformat_csv', $rownum);
-                    return 0;
+            if ($columncount != $headerscount || $columncount != 8  || $headerscount != 8) {
+                if ($columncount != $headerscount || $columncount != 13  || $headerscount != 13) {
+                    if ($columncount > $headerscount ) {
+                        // There are more than 7 values or there will be extra comma making them more then 7 values.
+                            echo get_string('commma_error', 'qformat_csv', $rownum);
+                        return 0;
+                    } else if ($columncount < $headerscount) {
+                        // Entire question with options and answer is not in one line, new line found.
+                            echo get_string('newline_error', 'qformat_csv', $rownum);
+                        return 0;
+                    } else {
+                        // There are more than 7 values or there will be extra comma making them more then 7 values.
+                            echo get_string('csv_file_error', 'qformat_csv', $rownum);
+                        return 0;
+                    }
                 }
             }
             for ($linedata = 0; $linedata < count($rowdata); $linedata++) {
@@ -102,28 +113,31 @@ class qformat_csv extends qformat_default {
                 }
 
                 $question->qtype = 'multichoice';
-                $question->name = $this->create_default_question_name($rownum, get_string('questionname', 'question'));
-                if ($headers[$linedata] == 'questiontext') {
+
+                if (trim($headers[$linedata]) == 'questionname') {
+                    $question->name = $rowdata[$linedata];
+                } else if (trim($headers[$linedata]) == 'questiontext') {
                       $question->questiontext = htmlspecialchars(trim($rowdata[$linedata]), ENT_NOQUOTES);
-                } else if ($headers[$linedata] == 'generalfeedback') {
+                } else if (trim($headers[$linedata]) == 'generalfeedback') {
                     // If extra column is provide with header 'generalfeedback' then that feedback will get applied.
                     $question->generalfeedback = $rowdata[$linedata];
                     $question->generalfeedbackformat = FORMAT_HTML;
-                } else if ($headers[$linedata] == 'defaultgrade') {
-                    $question->defaultgrade = $this->text_field($rowdata[$linedata]);
-                } else if ($headers[$linedata] == 'penalty') {
+                } else if (trim($headers[$linedata]) == 'defaultmark') {
+                    $question->defaultmark = $rowdata[$linedata];
+                } else if (trim($headers[$linedata]) == 'penalty') {
                     $question->penalty = $rowdata[$linedata];
-                } else if ($headers[$linedata] == 'hidden') {
+                } else if (trim($headers[$linedata]) == 'hidden') {
                     $question->hidden = $rowdata[$linedata];
-                } else if ($headers[$linedata] == 'answernumbering') {
+                } else if (trim($headers[$linedata]) == 'answernumbering') {
+                    // If extra column is provide with header 'answernumbering' then that answernumbering will get applied.
                     $question->answernumbering = $rowdata[$linedata];
-                } else if ($headers[$linedata] == 'correctfeedback') {
+                } else if (trim($headers[$linedata]) == 'correctfeedback') {
                     $question->correctfeedback = $this->text_field($rowdata[$linedata]);
-                } else if ($headers[$linedata] == 'partiallycorrectfeedback') {
+                } else if (trim($headers[$linedata]) == 'partiallycorrectfeedback') {
                     $question->partiallycorrectfeedback = $this->text_field($rowdata[$linedata]);
-                } else if ($headers[$linedata] == 'incorrectfeedback') {
+                } else if (trim($headers[$linedata]) == 'incorrectfeedback') {
                     $question->incorrectfeedback = $this->text_field($rowdata[$linedata]);
-                } else if ($headers[$linedata] == 'A') {
+                } else if (trim($headers[$linedata]) == 'A') {
                     $correctans1 = $linedata + 4;
                     $correctans2 = $linedata + 5;
                     $question->answer[] = $this->text_field($rowdata[$linedata]);
@@ -133,7 +147,7 @@ class qformat_csv extends qformat_default {
                         $question->fraction[] = 0;
                     }
                                                     $question->feedback[] = $this->text_field('');
-                } else if ($headers[$linedata] == 'B') {
+                } else if (trim($headers[$linedata]) == 'B') {
                     $correctans1 = $linedata + 3;
                     $correctans2 = $linedata + 4;
                     $question->answer[] = $this->text_field($rowdata[$linedata]);
@@ -143,7 +157,7 @@ class qformat_csv extends qformat_default {
                         $question->fraction[] = 0;
                     }
                     $question->feedback[] = $this->text_field('');
-                } else if ($headers[$linedata] == 'C') {
+                } else if (trim($headers[$linedata]) == 'C') {
                     $correctans1 = $linedata + 2;
                     $correctans2 = $linedata + 3;
                     $question->answer[] = $this->text_field($rowdata[$linedata]);
@@ -153,7 +167,7 @@ class qformat_csv extends qformat_default {
                         $question->fraction[] = 0;
                     }
                     $question->feedback[] = $this->text_field('');
-                } else if ($headers[$linedata] == 'D') {
+                } else if (trim($headers[$linedata]) == 'D') {
                     $correctans1 = $linedata + 1;
                     $correctans2 = $linedata + 2;
                     $question->answer[] = $this->text_field($rowdata[$linedata]);
