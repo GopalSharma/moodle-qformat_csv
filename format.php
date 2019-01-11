@@ -50,7 +50,7 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$globals['header'] = true;
+$GLOBALS['header'] = true;
 class qformat_csv extends qformat_default {
 
     public function provide_import() {
@@ -207,10 +207,10 @@ class qformat_csv extends qformat_default {
         $rightanswercount = 0;
         // Output depends on question type.
         // CSV Header should be printed only once.
-        if ($globals['header']) {
+        if ($GLOBALS['header']) {
                 $expout .= "questionname,questiontext,A,B,C,D,Answer 1,Answer 2,";
                 $expout .= "answernumbering, correctfeedback, partiallycorrectfeedback, incorrectfeedback, defaultmark";
-                $globals['header'] = false;
+                $GLOBALS['header'] = false;
         }
 
         switch($question->qtype) {
