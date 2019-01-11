@@ -52,6 +52,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $globals['header'] = true;
 class qformat_csv extends qformat_default {
+
     public function provide_import() {
         return true;
     }
@@ -200,38 +201,40 @@ class qformat_csv extends qformat_default {
 
     public function writequestion($question) {
         global $OUTPUT;
+        $expout = "";
+        $rightanswer = "";
+        $answercount = 0;
+        $rightanswercount = 0;
         // Output depends on question type.
+        // CSV Header should be printed only once.
         if ($globals['header']) {
-            if ($question->qtype == 'category') {// If Write "category to file" i selected then no need to add "\n" in header.
-                $expout = "questiontext,A,B,C,D,Answer 1,Answer 2";
-            } else {
-                $expout .= "questiontext,A,B,C,D,Answer 1,Answer 2\n";
-            }
-            $globals['header'] = false;
+                $expout .= "questionname,questiontext,A,B,C,D,Answer 1,Answer 2,";
+                $expout .= "answernumbering, correctfeedback, partiallycorrectfeedback, incorrectfeedback, defaultmark";
+                $globals['header'] = false;
         }
-          $answercount = 0;
-          $rightanswercount = 0;
+
         switch($question->qtype) {
             case 'multichoice':
                 if (count($question->options->answers) != 4 ) {
                     break;
                 }
+                $expout .= '"'.$question->name.'"'.',';
                 $expout .= '"'.$question->questiontext.'"'.',';
                 foreach ($question->options->answers as $answer) {
                     $answercount++;
                     if ($answer->fraction == 1 && $question->options->single) {
                         switch ($answercount) {
                             case 1:
-                                $rightanswer = 'A'.',';
+                                $rightanswer = 'A'.', ,';
                                 break;
                             case 2:
-                                $rightanswer = 'B'.',';
+                                $rightanswer = 'B'.', ,';
                                 break;
                             case 3:
-                                $rightanswer = 'C'.',';
+                                $rightanswer = 'C'.', ,';
                                 break;
                             case 4:
-                                $rightanswer = 'D'.',';
+                                $rightanswer = 'D'.', ,';
                                 break;
                             default:
                                 $rightanswer = '';
@@ -239,7 +242,7 @@ class qformat_csv extends qformat_default {
                         }
                     } else if ($answer->fraction == 0.5 && !$question->options->single) {
                         $rightanswercount ++;
-                        $comma = "";
+                        $comma = ",";
                         if ( $rightanswercount <= 1 ) {
                             $comma = ","; // Add comma  to first answer i.e. to 'Answer 1'.
                         }
@@ -265,9 +268,14 @@ class qformat_csv extends qformat_default {
                     $expout .= '"'.$answer->answer.'"'.',';
                 }
                 $expout .= $rightanswer;
+                $expout .= '"'.$question->options->answernumbering.'"'.',';
+                $expout .= '"'.$question->options->correctfeedback.'"'.',';
+                $expout .= '"'.$question->options->partiallycorrectfeedback.'"'.',';
+                $expout .= '"'.$question->options->incorrectfeedback.'"'.',';
+                $expout .= '"'.$question->defaultmark.'"'.',';
+
             break;
         }
-
         return $expout;
     }
 }
