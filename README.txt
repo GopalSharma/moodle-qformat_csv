@@ -1,5 +1,9 @@
 NEW in 3.6.02
 ==============
+FIX: Solved the issue with Html tags in feedback.
+
+NEW in 3.6.02
+==============
 - New: Added 'questionname' option in the standard CSV file, total fields/columns are 8 now.
 - New: Extended CSV file with many more fields for questionname, answernumbering, correctfeedback, partiallycorrectfeedback,
 incorrectfeedback and defaultmark, total fields/columns are 13 now.
