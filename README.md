@@ -1,17 +1,21 @@
-## This plugin contains support for importing  questions from a CSV format file and exporting questions (only multichoices) to a CSV format file.
+### This plugin contains support for importing  questions from a CSV format file and exporting questions (only multichoices) to a CSV format file.
 
-## NEW in 3.6.02
+#### NEW in 3.6.03
+- FIX: Solved the issue with Html tags in feedback.
+--------------
+
+#### NEW in 3.6.02
 - New: Added 'questionname' option in the standard CSV file, total fields/columns are 8 now.
 - New: Extended CSV file with many more fields for questionname, answernumbering, correctfeedback, partiallycorrectfeedback, incorrectfeedback and defaultmark, total fields/columns are 13 now.
 - NEW: Now, while exporting questions into a CSV file, the CSV file will have 13 fields/columns by default.
 
 --------------
 
-## NEW in 3.6.01
+#### NEW in 3.6.01
 - FIX: Solved the issue with answers and tested the plugin with Moodle version 3.6.
 
 --------------
-## New in 3.5.04 (Build: 2018091801)
+#### New in 3.5.04 (Build: 2018091801)
 - FIX: Issue related to multiple answers, even single choice answer is getting converted into a multi-choice answer.
 - FIX: Solved the issue related to CSV file handling.
 - NEW: Implemented functionality to export multichoice question into a CSV file having four options and maximum of two right answers.
@@ -19,7 +23,7 @@
 
 Find out more on this link : https://docs.moodle.org/36/en/qformat/csv
 
-# Description : Question format import and export plugin
+### Description : Question format import and export plugin
 
 This plugin contains support for importing only multichoice questions in CSV format file in question bank and exporting questions from a question bank in a CSV file.
 The CSV format is a very simple way of creating multiple choice questions using a CSV(Comma separated value) file.
@@ -27,10 +31,10 @@ The first line of the CSV file must contain the headers separated with commas.
 
 --------------
 Now, There can be two types of CSV files that can be used
-## 1. Simple CSV :
+#### 1. Simple CSV :
 
 This one will have same fields what we used to have(only addition is question name in the field)
-	All the other (except Header) rows/lines contain details about the one question ie. question name, question text, four option, and answer1 , answer2.
+	All the other (except Header) rows/lines contain details about the one question ie. **question name, question text, four option, and answer1 , answer2**.
 
 Each line will contain the details about the one question.
 
@@ -45,10 +49,10 @@ The simple CSV file used for import should have the following structure : <br>
 
 --------------
 
-## 2. Extended CSV :
+#### 2. Extended CSV :
 
 This CSV file will have extra fields like answernumbering, correctfeedback, partiallycorrectfeedback, incorrectfeedback and defaultmark.<br>
-	All the other (except Header) rows/lines contain details about the one question ie. question name, question text, four option, answer1, answer2, answernumbering, correctfeedback, partiallycorrectfeedback, incorrectfeedback and defaultmark.
+	All the other (except Header) rows/lines contain details about the one question ie. **question name, question text, four option, answer1, answer2, answernumbering, correctfeedback, partiallycorrectfeedback, incorrectfeedback and defaultmark**.
 file with many other options.<br>
 
 Each line will contain the details about the one question.
@@ -64,7 +68,7 @@ The CSV file used for import should have the following structure :<br>
 
 --------------
 
-## IMPORTANT NOTES:
+### IMPORTANT NOTES:
 
 * You have to save the file strictly in csv format. Don't save it as an Excel document or anything like that.
 * Non-ASCII characters like 'quotes' can cause import errors.
