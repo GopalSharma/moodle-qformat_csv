@@ -121,8 +121,8 @@ class qformat_csv extends qformat_default {
                       $question->questiontext = htmlspecialchars(trim($rowdata[$linedata]), ENT_NOQUOTES);
                 } else if (trim($headers[$linedata]) == 'generalfeedback') {
                     // If extra column is provide with header 'generalfeedback' then that feedback will get applied.
-                    $question->generalfeedback = $rowdata[$linedata];
-                    $question->generalfeedbackformat = FORMAT_HTML;
+                    $question->generalfeedback['text'] = $rowdata[$linedata];
+                    $question->generalfeedback['format'] = FORMAT_HTML;
                 } else if (trim($headers[$linedata]) == 'defaultmark') {
                     $question->defaultmark = $rowdata[$linedata];
                 } else if (trim($headers[$linedata]) == 'penalty') {
@@ -133,11 +133,14 @@ class qformat_csv extends qformat_default {
                     // If extra column is provide with header 'answernumbering' then that answernumbering will get applied.
                     $question->answernumbering = $rowdata[$linedata];
                 } else if (trim($headers[$linedata]) == 'correctfeedback') {
-                    $question->correctfeedback = $this->text_field($rowdata[$linedata]);
+                    $question->correctfeedback['text'] = $rowdata[$linedata];
+                    $question->correctfeedback['format'] = FORMAT_HTML;
                 } else if (trim($headers[$linedata]) == 'partiallycorrectfeedback') {
-                    $question->partiallycorrectfeedback = $this->text_field($rowdata[$linedata]);
+                    $question->partiallycorrectfeedback['text'] = $rowdata[$linedata];
+                    $question->partiallycorrectfeedback['format'] = FORMAT_HTML;
                 } else if (trim($headers[$linedata]) == 'incorrectfeedback') {
-                    $question->incorrectfeedback = $this->text_field($rowdata[$linedata]);
+                    $question->incorrectfeedback['format'] = FORMAT_HTML;
+                    $question->incorrectfeedback['text'] = $rowdata[$linedata];
                 } else if (trim($headers[$linedata]) == 'A') {
                     $correctans1 = $linedata + 4;
                     $correctans2 = $linedata + 5;
