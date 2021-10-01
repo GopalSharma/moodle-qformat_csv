@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2019031501;        // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version   = 2021100101;        // The current plugin version (Date: YYYYMMDDXX).
 $plugin->maturity  = MATURITY_STABLE;  // Maturity level.
 $plugin->component  = 'qformat_csv';  // Plugin name.
 $plugin->release  = '3.6.03 (Build: 2019012401)';  // The current module release in human-readable form (x.y).

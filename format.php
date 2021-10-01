@@ -18,7 +18,7 @@
  * CSV format question importer.
  *
  * @package    qformat_csv
- * @copyright  2018 Gopal Sharma <gopalsharma66@gmail.com>
+ * @copyright  2021 Gopal Sharma <gopalsharma66@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -118,13 +118,13 @@ class qformat_csv extends qformat_default {
                 if (trim($headers[$linedata]) == 'questionname') {
                     $question->name = $rowdata[$linedata];
                 } else if (trim($headers[$linedata]) == 'questiontext') {
-                      $question->questiontext = htmlspecialchars(trim($rowdata[$linedata]), ENT_NOQUOTES);
+                      $question->questiontext = html_entity_decode(trim($rowdata[$linedata]));
                 } else if (trim($headers[$linedata]) == 'generalfeedback') {
                     // If extra column is provide with header 'generalfeedback' then that feedback will get applied.
-                    $question->generalfeedback['text'] = $rowdata[$linedata];
+                    $question->generalfeedback['text'] = html_entity_decode(trim($rowdata[$linedata]));
                     $question->generalfeedback['format'] = FORMAT_HTML;
                 } else if (trim($headers[$linedata]) == 'defaultmark') {
-                    $question->defaultmark = $rowdata[$linedata];
+                    $question->defaultmark = html_entity_decode(trim($rowdata[$linedata]));
                 } else if (trim($headers[$linedata]) == 'penalty') {
                     $question->penalty = $rowdata[$linedata];
                 } else if (trim($headers[$linedata]) == 'hidden') {
@@ -133,14 +133,14 @@ class qformat_csv extends qformat_default {
                     // If extra column is provide with header 'answernumbering' then that answernumbering will get applied.
                     $question->answernumbering = $rowdata[$linedata];
                 } else if (trim($headers[$linedata]) == 'correctfeedback') {
-                    $question->correctfeedback['text'] = $rowdata[$linedata];
+                    $question->correctfeedback['text'] = html_entity_decode(trim($rowdata[$linedata]));
                     $question->correctfeedback['format'] = FORMAT_HTML;
                 } else if (trim($headers[$linedata]) == 'partiallycorrectfeedback') {
-                    $question->partiallycorrectfeedback['text'] = $rowdata[$linedata];
+                    $question->partiallycorrectfeedback['text'] = html_entity_decode(trim($rowdata[$linedata]));
                     $question->partiallycorrectfeedback['format'] = FORMAT_HTML;
                 } else if (trim($headers[$linedata]) == 'incorrectfeedback') {
                     $question->incorrectfeedback['format'] = FORMAT_HTML;
-                    $question->incorrectfeedback['text'] = $rowdata[$linedata];
+                    $question->incorrectfeedback['text'] = html_entity_decode(trim($rowdata[$linedata]));
                 } else if (trim($headers[$linedata]) == 'A') {
                     $correctans1 = $linedata + 4;
                     $correctans2 = $linedata + 5;
@@ -191,7 +191,7 @@ class qformat_csv extends qformat_default {
     }
     protected function text_field($text) {
         return array(
-            'text' => htmlspecialchars(trim($text), ENT_NOQUOTES),
+            'text' => html_entity_decode(trim($text)),
             'format' => FORMAT_HTML,
             'files' => array(),
         );
