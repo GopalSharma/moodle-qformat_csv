@@ -27,6 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 $plugin->version   = 2021100101;        // The current plugin version (Date: YYYYMMDDXX).
 $plugin->maturity  = MATURITY_STABLE;  // Maturity level.
 $plugin->component  = 'qformat_csv';  // Plugin name.
-$plugin->release  = '3.6.03 (Build: 2019012401)';  // The current module release in human-readable form (x.y).
+$plugin->release  = '3.11.01 (Build: 2021100101)';  // The current module release in human-readable form (x.y).
 $plugin->requires = 2015111609;  // Requires Moodle 3.0 or later. But, I think this plugin works with earlier version also.
 $plugin->cron     = 0;           // Period for cron to check this module (secs).
