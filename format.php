@@ -50,17 +50,6 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
- defined('MOODLE_INTERNAL') || die();
-
- /**
- * Importer for Moodle XML question format.
- *
- * See http://docs.moodle.org/en/Moodle_XML_format for a description of the format.
- *
- * @copyright  1999 onwards Martin Dougiamas {@link http://moodle.com}
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 class qformat_csv extends qformat_default {
 
     // functions to indicate import/export functionality
