@@ -1,5 +1,9 @@
 ### This plugin contains support for importing  questions from a CSV format file and exporting questions (only multichoices) to a CSV format file.
 
+#### NEW in 5.0 
+- FIX: Export question issues for to export multichoice question only and ignore other question.
+--------------
+
 #### NEW in 3.11.01 
 - FIX: Solved the issue with Html tags in questions and answers.
 --------------
