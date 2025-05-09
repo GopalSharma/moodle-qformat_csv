@@ -50,13 +50,27 @@ defined('MOODLE_INTERNAL') || die();
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$globals['header'] = true;
+ defined('MOODLE_INTERNAL') || die();
+
+ /**
+ * Importer for Moodle XML question format.
+ *
+ * See http://docs.moodle.org/en/Moodle_XML_format for a description of the format.
+ *
+ * @copyright  1999 onwards Martin Dougiamas {@link http://moodle.com}
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 class qformat_csv extends qformat_default {
 
+    // functions to indicate import/export functionality
+
+    /** @return bool whether this plugin provides import functionality. */
     public function provide_import() {
         return true;
     }
 
+    /** @return bool whether this plugin provides export functionality. */
     public function provide_export() {
         return true;
     }
@@ -69,6 +83,24 @@ class qformat_csv extends qformat_default {
         return '.csv';
     }
 
+    /**
+     * Parses an array of lines into an array of questions,
+     * where each item is a question object as defined by
+     * readquestion().   Questions are defined as anything
+     * between blank lines.
+     *
+     * NOTE this method used to take $context as a second argument. However, at
+     * the point where this method was called, it was impossible to know what
+     * context the quetsions were going to be saved into, so the value could be
+     * wrong. Also, none of the standard question formats were using this argument,
+     * so it was removed. See MDL-32220.
+     *
+     * If your format does not use blank lines as a delimiter
+     * then you will need to override this method. Even then
+     * try to use readquestion for each question
+     * @param array lines array of lines from readdata
+     * @return array array of question objects
+     */
     public function readquestions($lines) {
         global $CFG;
         require_once($CFG->libdir . '/csvlib.class.php');
@@ -189,6 +221,16 @@ class qformat_csv extends qformat_default {
         }
          return $questions;
     }
+
+    /**
+     * Return the array moodle is expecting
+     * for an HTML text. No processing is done on $text.
+     * qformat classes that want to process $text
+     * for instance to import external images files
+     * and recode urls in $text must overwrite this method.
+     * @param array $text some HTML text string
+     * @return array with keys text, format and files.
+     */
     protected function text_field($text) {
         return array(
             'text' => html_entity_decode(trim($text)),
@@ -197,11 +239,42 @@ class qformat_csv extends qformat_default {
         );
     }
 
+    /**
+     * Given the data known to define a question in
+     * this format, this function converts it into a question
+     * object suitable for processing and insertion into Moodle.
+     *
+     * If your format does not use blank lines to delimit questions
+     * (e.g. an XML format) you must override 'readquestions' too
+     * @param $lines mixed data that represents question
+     * @return object question object
+     */
     public function readquestion($lines) {
         // This is no longer needed but might still be called by default.php.
         return;
     }
 
+    /**
+     * Enable any processing to be done on the content
+     * just prior to the file being saved
+     * default is to do nothing
+     * @param string output text
+     * @param string processed output text
+     */
+    protected function presave_process($content) {
+        // CSV Header should be printed only once.
+        $expout = "questionname,questiontext,A,B,C,D,Answer 1,Answer 2,";
+        $expout .= "answernumbering, correctfeedback, partiallycorrectfeedback, incorrectfeedback, defaultmark";
+        return $expout.$content;
+    }
+
+    /**
+     * convert a single question object into text output in the given
+     * format.
+     * This must be overriden
+     * @param object question question object
+     * @return mixed question export text or null if not implemented
+     */
     public function writequestion($question) {
         global $OUTPUT;
         $expout = "";
@@ -210,11 +283,6 @@ class qformat_csv extends qformat_default {
         $rightanswercount = 0;
         // Output depends on question type.
         // CSV Header should be printed only once.
-        if ($globals['header']) {
-                $expout .= "questionname,questiontext,A,B,C,D,Answer 1,Answer 2,";
-                $expout .= "answernumbering, correctfeedback, partiallycorrectfeedback, incorrectfeedback, defaultmark";
-                $globals['header'] = false;
-        }
 
         switch($question->qtype) {
             case 'multichoice':
@@ -275,10 +343,12 @@ class qformat_csv extends qformat_default {
                 $expout .= '"'.$question->options->correctfeedback.'"'.',';
                 $expout .= '"'.$question->options->partiallycorrectfeedback.'"'.',';
                 $expout .= '"'.$question->options->incorrectfeedback.'"'.',';
-                $expout .= '"'.$question->defaultmark.'"'.',';
+                $expout .= '"'.$question->defaultmark.'"';
 
             break;
+            default: return null;
         }
         return $expout;
     }
+    
 }
